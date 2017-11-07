@@ -4,4 +4,17 @@
   <artifactId>myhome</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.tomcat.maven</groupId>
+  			<artifactId>tomcat7-maven-plugin</artifactId>
+  			<version>2.1</version>
+  			<configuration>
+  				<port>9001</port>
+  				<path>/</path>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
 </project>

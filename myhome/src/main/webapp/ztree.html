@@ -5,163 +5,203 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
+
 	<head>
 		<title>IT快乐驿站</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="assets/js/main.js"></script>
 		<!-- 导入ztree类库 -->
 		<link rel="stylesheet" href="js/ztree/zTreeStyle.css" type="text/css" />
 		<script src="js/ztree/jquery.ztree.all-3.5.js" type="text/javascript"></script>
 		<style type="text/css">
-			.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+			.ztree li span.button.add {
+				margin-left: 2px;
+				margin-right: -1px;
+				background-position: -144px 0;
+				vertical-align: top;
+				*vertical-align: middle
+			}
 		</style>
 		<script type="text/javascript">
-		function clearForm(){
-			$("#pid").val('');
-						$("#id").val('');
-						$("#name").val('');
-						$("#description").val('');
-						$("#priority").val('');
-						$("#page").val('');
-		}
-		
-		function addHoverDom(treeId, treeNode) {
-			var sObj = $("#" + treeNode.tId + "_span");
-					if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
-					var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-						+ "' title='添加' onfocus='this.blur();'></span>";
-					sObj.after(addStr);
-					var btn = $("#addBtn_"+treeNode.tId);
-					if (btn) btn.bind("click", function(){
-						alert("添加");
-						clearForm();
-						
-						//
-						$("#pid").val(treeNode.id);
-						
-						
-						$(".mask").fadeIn();
-				//
-				$(".right").animate({
-							right:"0"
-						});
-						
-					});
-		};
-		function removeHoverDom(treeId, treeNode) {
-			$("#addBtn_"+treeNode.tId).unbind().remove();
-		};
-		function showRemoveBtn(treeId, treeNode) {
-			return !treeNode.isParent;
-		}
-		function showRenameBtn(treeId, treeNode) {
-			return true;
-		}
-		
-		
+			function clearForm() {
+				$("#pid").val('');
+				$("#id").val('');
+				$("#name").val('');
+				$("#description").val('');
+				$("#priority").val('');
+				$("#page").val('');
+			}
 
-		$(function(){
-			var setting = {
-				view: {
-				addHoverDom: addHoverDom,
-				removeHoverDom: removeHoverDom,
-				selectedMulti: false
-			},
-			edit: {
-				removeTitle:'删除',
-				renameTitle:'修改',
-				enable: true,
-				showRemoveBtn: showRemoveBtn,
-				showRenameBtn: showRenameBtn
-			},
-				data: {
-					simpleData: {
-						enable: true
-					}
-				}
-				,callback:{
-					beforeEditName:function(treeId, treeNode){
-						clearForm();
-						alert("修改节点");
-						$("#pid").val(treeNode.pId);
-						$("#id").val(treeNode.id);
-						$("#name").val(treeNode.name);
-						$("#description").val(treeNode.description);
-						$("#priority").val(treeNode.priority);
-						$("#page").val(treeNode.page);
-						
-						$(".mask").fadeIn();
-						$(".right").animate({
-							right:"0"
-						});
-						return false;
-					},
-					beforeRemove:function(treeId, treeNode){
-						var flag = confirm('delete?');
-						if (flag){
-							//ajax
-						}
-						return false;
-					}
-				}
+			function addHoverDom(treeId, treeNode) {
+				var sObj = $("#" + treeNode.tId + "_span");
+				if(treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+				var addStr = "<span class='button add' id='addBtn_" + treeNode.tId +
+					"' title='添加' onfocus='this.blur();'></span>";
+				sObj.after(addStr);
+				var btn = $("#addBtn_" + treeNode.tId);
+				if(btn) btn.bind("click", function() {
+					clearForm();
+
+					//
+					$("#pid").val(treeNode.id);
+
+					$(".mask").fadeIn();
+					//
+					$(".right").animate({
+						right: "0"
+					});
+					$(".right").show();
+
+				});
 			};
-			
-			$.ajax({
-				type:"post",
-				url:"data/menu.json",
-				dataType:"json",
-				success:function(data){
-					var zNodes = data;
-					$.fn.zTree.init($("#munuTree"), setting, zNodes);
-				}
-			});
-			
-			$("#saveBtn").click(function(){
-				//$("#menuInfo").submit();
-				alert("提交表单");
-				$(".right").hide();
-				$(".right").animate({
-							right:"-500"
-						});
-			});
-			$("#cancelBtn").click(function(){
-				$(".right").hide();
-				$(".right").animate({
-							right:"-500"
-						});
+
+			function removeHoverDom(treeId, treeNode) {
+				$("#addBtn_" + treeNode.tId).unbind().remove();
+			};
+
+			function showRemoveBtn(treeId, treeNode) {
+				return !treeNode.isParent;
+			}
+
+			function showRenameBtn(treeId, treeNode) {
+				return true;
+			}
+
+			$(function() {
+				var setting = {
+					view: {
+						addHoverDom: addHoverDom,
+						removeHoverDom: removeHoverDom,
+						selectedMulti: false
+					},
+					edit: {
+						removeTitle: '删除',
+						renameTitle: '修改',
+						enable: true,
+						showRemoveBtn: showRemoveBtn,
+						showRenameBtn: showRenameBtn
+					},
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					callback: {
+						beforeEditName: function(treeId, treeNode) {
+							clearForm();
+							$("#pid").val(treeNode.pId);
+							$("#id").val(treeNode.id);
+							$("#name").val(treeNode.name);
+							$("#description").val(treeNode.description);
+							$("#priority").val(treeNode.priority);
+							$("#page").val(treeNode.page);
+
+							$(".mask").fadeIn();
+							$(".right").animate({
+								right: "0"
+							});
+							$(".right").show();
+							return false;
+						},
+						beforeRemove: function(treeId, treeNode) {
+							var flag = confirm('delete?');
+							if(flag) {
+								//ajax
+								alert("删除");
+							}
+							return false;
+						}
+					}
+				};
+
+				var zNodes = [
+		{ "id":"11", "pId":"0", "name":"基础数据"},
+		{ "id":"111", "pId":"11", "name":"基础档案设置",  "page":"pages/base/archives.html"},
+		{ "id":"112", "pId":"11", "name":"收派标准",  "page":"pages/base/standard.html"},
+		{ "id":"113", "pId":"11", "name":"班车管理",  "page":"pages/base/vehicle.html"},
+		{ "id":"114", "pId":"11", "name":"快递员设置/替班",  "page":"pages/base/courier.html"},
+		{ "id":"115", "pId":"11", "name":"区域设置","page":"pages/base/area.html"},
+		{ "id":"116", "pId":"11", "name":"管理分区", "page":"pages/base/sub_area.html"},
+		{ "id":"117", "pId":"11", "name":"管理定区/调度排班","page":"pages/base/fixed_area.html"},
+		{ "id":"118", "pId":"11", "name":"收派时间管理","page":"pages/base/take_time.html"},
+		{ "id":"12", "pId":"0", "name":"受理"},
+		{ "id":"121", "pId":"12", "name":"业务受理" ,"page":"pages/take_delivery/order.html"},
+		{ "id":"122", "pId":"12", "name":"运单快速录入" ,"page":"pages/take_delivery/waybill_quick.html"},
+		{ "id":"123", "pId":"12", "name":"运单录入" ,"page":"pages/take_delivery/waybill.html"},
+		{ "id":"124", "pId":"12", "name":"运单导入" ,"page":"pages/take_delivery/waybill_import.html"},
+		{ "id":"125", "pId":"12", "name":"运单管理" ,"page":"pages/take_delivery/waybill_manage.html"},
+		{ "id":"126", "pId":"12", "name":"异调运单" ,"page":"pages/take_delivery/different_waybill.html"},
+		{ "id":"127", "pId":"12", "name":"运单打印" ,"page":"pages/take_delivery/waybill_print.html"},
+		{ "id":"13", "pId":"0", "name":"调度"},
+		{ "id":"131", "pId":"13", "name":"查台转单","page":"pages/take_delivery/change_work_order.html"},
+		{ "id":"132", "pId":"13", "name":"人工调度","page":"pages/take_delivery/dispatcher.html"},
+		{ "id":"133", "pId":"13", "name":"取派调度监控","page":"pages/take_delivery/dispatcher_monitor.html"},
+		{ "id":"134", "pId":"13", "name":"签收录入","page":"pages/take_delivery/sign_input.html"},
+		{ "id":"135", "pId":"13", "name":"取消签收申请","page":"pages/take_delivery/sign_cancel.html"},
+		{ "id":"136", "pId":"13", "name":"宣传任务","page":"pages/take_delivery/promotion.html"},
+		{ "id":"14", "pId":"0", "name":"分拣管理"},
+		{ "id":"141", "pId":"14", "name":"入库","page":"pages/transit/in_storage.html"},
+		{ "id":"142", "pId":"14", "name":"出库","page":"pages/transit/out_storage.html"},
+		{ "id":"143", "pId":"14", "name":"盘库","page":"pages/transit/make_storage.html"},
+		{ "id":"144", "pId":"14", "name":"合包","page":"pages/transit/compose_package.html"},
+		{ "id":"145", "pId":"14", "name":"到达时间录入","page":"pages/transit/arrive_time.html"},
+		{ "id":"146", "pId":"14", "name":"出入库查询","page":"pages/transit/in_out_search.html"},
+		{ "id":"147", "pId":"14", "name":"库存查询","page":"pages/transit/remain_search.html"},
+		{ "id":"148", "pId":"14", "name":"合包查询","page":"pages/transit/package_search.html"}
+];
+
+				
+						$.fn.zTree.init($("#munuTree"), setting, zNodes);
+				
+
+				$("#saveBtn").click(function() {
+					//$("#menuInfo").submit();
+					alert("提交表单");
+					$(".mask").fadeOut();
+					$(".right").animate({
+						right: "500"
+					});
+					$(".right").hide();
+				});
+				$("#cancelBtn").click(function() {
+					$(".mask").fadeOut();
+					$(".right").animate({
+						right: "500"
+					});
+					$(".right").hide();
+				})
 			})
-		})
-			
-		
 		</script>
 		<style type="text/css">
-			.left{
+			.left {
 				position: absolute;
 				top: 0px;
 				bottom: 0px;
 				left: 0px;
 				width: 100%;
 			}
-			.right{
+			
+			.right {
+				display: none;
 				position: absolute;
 				top: 0px;
 				bottom: 0px;
 				z-index: 1000;
 				width: 500px;
-				right: -500px;
-				border-left:solid 1px cadetblue;
+				right: 500px;
 				background: #fff;
 			}
-			.mask{
+			
+			.mask {
 				display: none;
 				position: absolute;
 				top: 0;
@@ -176,78 +216,93 @@
 			}
 		</style>
 	</head>
+
 	<body>
 
 		<!-- Header -->
-			<header id="header">
-				<a href="index.html" class="title">IT快乐驿站</a>
-				<nav>
-					<ul>
-						<li><a href="index.html">Home</a></li>
-					</ul>
-				</nav>
-			</header>
+		<header id="header">
+			<a href="index.html" class="title">IT快乐驿站</a>
+			<nav>
+				<ul>
+					<li>
+						<a href="index.html">Home</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
 
 		<!-- Wrapper -->
-			<div id="wrapper">
+		<div id="wrapper">
 
-				<!-- Main -->
-					<section id="main" class="wrapper">
-						<div class="inner">
-							<h1 class="major">使用Ztree构建系统树节点</h1>
+			<!-- Main -->
+			<section id="main" class="wrapper">
+				<div class="inner">
+					<h1 class="major">使用Ztree构建系统树节点</h1>
 
-							<!-- Text -->
-								<section>
-									<h2>关于ztree</h2>
-									<blockquote>zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。</blockquote>
-									<p>我们在构建系统管理模块时，难免涉及到对权限树的增删改，直接用列表展示无法获取直观的树形菜单效果，因此，我们使用ztree来动态展示我们的树节点，控制增删改主要完成回调函数addHoverDom、beforeEditName、beforeRemove的实现。效果如下：</p>
-									<div class="left">
-			<div class="mask"></div>
-			<div>
-				<ul id="munuTree" class="ztree"></ul>
-			</div>
-			
+					<!-- Text -->
+					<section>
+						<h2>关于ztree</h2>
+						<blockquote>zTree 是一个依靠 jQuery 实现的多功能 “树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。</blockquote>
+						<p>我们在构建系统管理模块时，难免涉及到对权限树的增删改，直接用列表展示无法获取直观的树形菜单效果，因此，我们使用ztree来动态展示我们的树节点，控制增删改主要完成回调函数addHoverDom、beforeEditName、beforeRemove的实现。效果如下：</p>
+					</section>
+					<section>
+						<div  style="background: white; position: relative;height: 600px;">
+							<div class="left">
+								<div class="mask"></div>
+								<div>
+									<ul id="munuTree" class="ztree"></ul>
+								</div>
+
+							</div>
+							<div class="right" style="background-color: #271E1E;">
+
+								<form id="menuInfo" method="post" action="">
+									<input type="hidden" id="pid" name="parentMenu.id" />
+									<input type="hidden" name="id" id="id" value="" />
+									<table>
+										<thead>
+											<tr>
+												<td>菜单信息</td>
+											</tr>
+											<tr>
+												<td>名称</td>
+												<td><input type="text" name="name" id="name" value="" /></td>
+											</tr>
+											<tr>
+												<td>描述</td>
+												<td><input type="text" name="description" id="description" value="" /></td>
+											</tr>
+											<tr>
+												<td>优先级</td>
+												<td><input type="text" name="priority" id="priority" value="" /></td>
+											</tr>
+											<tr>
+												<td>路径</td>
+												<td><input type="text" name="page" id="page" value="" /></td>
+											</tr>
+											
+												
+											
+										</thead>
+									</table>
+								</form>
+								<button id="saveBtn">保存</button><button id="cancelBtn">取消</button>
+							</div>
+						</div>
+					</section>
+				</div>
+			</section>
 		</div>
-		<div class="right" >
-			
-			<form id="menuInfo" method="post" action="../../menu_save2.action">
-				<input type="hidden" id="pid" name="parentMenu.id"/>
-				<input type="hidden" name="id" id="id" value="" />
-			<table>
-				<thead>
-					<tr>
-					<td>菜单信息</td>
-					</tr>
-					<tr>
-					<td>名称</td><td><input type="text" name="name" id="name" value="" /></td>
-					</tr>
-					<tr>
-					<td>描述</td><td><input type="text" name="description" id="description" value="" /></td>
-					</tr>
-					<tr>
-					<td>优先级</td><td><input type="text" name="priority" id="priority" value="" /></td>
-					</tr>
-					<tr>
-					<td>路径</td><td><input type="text" name="page" id="page" value="" /></td>
-					</tr>
-					<tr><td><button id="saveBtn">保存</button> <button id="cancelBtn">取消</button></td></tr>
-				</thead>
-			</table>
-			</form>
-		</div>
-
-			</div>
 
 		<!-- Footer -->
-			<footer id="footer" class="wrapper alt">
-				<div class="inner">
+		<footer id="footer" class="wrapper alt">
+			<div class="inner">
 					<ul class="menu">
-						<li>&copy; Untitled. All rights reserved.</li><li>More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></li>
+						<li>&copy; Untitled. All rights reserved.</li><li>感谢<a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a>提供的html5模板 </li>
 					</ul>
 				</div>
-			</footer>
-
-		
+		</footer>
 
 	</body>
+
 </html>
